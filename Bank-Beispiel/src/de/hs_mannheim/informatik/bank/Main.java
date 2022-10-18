@@ -8,6 +8,7 @@ public class Main {
 	public static void main(String[] args) {
 		Banksystem bs = new Banksystem("Spaßkasse Mannheim");
 		UI ui = new UI(bs);
+		
 	}
 
 }

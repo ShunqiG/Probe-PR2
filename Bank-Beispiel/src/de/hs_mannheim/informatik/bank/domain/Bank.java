@@ -22,5 +22,9 @@ public class Bank {
 	public Collection<Konto> getKontenliste() {
 		return konten.values();
 	}
+
+	public Konto findeKonto(int kontonummer) {
+		return konten.get(kontonummer);
+	}
 	
 }
