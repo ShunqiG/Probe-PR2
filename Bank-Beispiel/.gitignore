@@ -179,3 +179,5 @@ replay_pid*
 # Built Visual Studio Code Extensions
 *.vsix
 
+/bank.ser
+/zähler.ser
