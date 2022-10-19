@@ -1,6 +1,8 @@
 package de.hs_mannheim.informatik.bank.domain;
 
-public class Girokonto extends Konto {
+import java.io.Serializable;
+
+public class Girokonto extends Konto implements Serializable {
 
 	public Girokonto(String inhaber) {
 		super(inhaber);

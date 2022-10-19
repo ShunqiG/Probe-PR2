@@ -1,8 +1,9 @@
 package de.hs_mannheim.informatik.bank.domain;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Kontobewegung {
+public class Kontobewegung implements Serializable {
 	private long betrag;
 	private Date datum;
 	private String betreff;

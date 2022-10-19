@@ -1,23 +1,36 @@
 package de.hs_mannheim.informatik.bank.domain;
 
+import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Konto {
+import de.hs_mannheim.informatik.bank.infrastructure.Persistenz;
+
+public class Konto implements Serializable {
 	private static int kontozähler = 0;
-	
+
+	static { 		// die bislang eleganteste Lösung, die mir eingefallen ist
+		try {
+			if (Persistenz.sindDatenGespeichert())
+				kontozähler = Persistenz.ladeKontozähler();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 	private int nummer;
 	private long stand = 0;
 	private String inhaber;
-	
+
 	private ArrayList<Kontobewegung> kontobewegungen;
 
 	public Konto(String inhaber) {
 		nummer = 1000 + kontozähler++;
 		this.inhaber = inhaber;
-		
+
 		this.kontobewegungen = new ArrayList<>();
 	}
-	
+
 	public int getKontonummer() {
 		return nummer;
 	}
@@ -26,42 +39,46 @@ public class Konto {
 	public String toString() {
 		return "Konto [nummer=" + nummer + ", inhaber=" + inhaber + "]";
 	}
-	
+
 	public String getInhaber() {
 		return inhaber;
 	}
-	
+
 	public long getKontostand() {
 		return stand;
 	}
-	
+
 	public void einzahlen(long betrag, String zweck, String art, String auftraggeber) {
 		stand += betrag;
-		
+
 		kontobewegungen.add(new Kontobewegung(betrag, zweck, art, auftraggeber));
 	}
-	
+
 	public boolean auszahlen(long betrag, String zweck, String art, String auftraggeber) {
 		if (stand - betrag >= 0) {
 			stand -= betrag;
-			
+
 			kontobewegungen.add(new Kontobewegung(betrag * -1, zweck, art, auftraggeber));
-			
+
 			return true;
 		}
-		
+
 		return false;
 	}
-	
+
 	public String[] getKontobewegungen() {
 		String[] auflistung = new String[kontobewegungen.size()];
-		
+
 		int i = 0;
 		for (Kontobewegung kb : kontobewegungen) {
 			auflistung[i++] = kb.toString();
 		}
-		
+
 		return auflistung;
 	}
 	
+	public int getKontozähler() {
+		return kontozähler;
+	}
+
 }

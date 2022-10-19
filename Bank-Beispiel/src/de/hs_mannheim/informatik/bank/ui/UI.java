@@ -27,7 +27,7 @@ public class UI {
 				System.out.println("4 -> Geld auszahlen");
 				System.out.println("5 -> Kontoauszug drucken");
 				System.out.println("6 -> Überweisung beauftragen");
-				
+
 				System.out.println("9 -> Beenden");
 				System.out.println();
 
@@ -35,23 +35,29 @@ public class UI {
 				int input = Integer.parseInt(sc.nextLine());
 				System.out.println();
 
-				switch(input) {
+				try {
+					switch(input) {
 					case 1: kontenAnzeigen(); break;
-					case 2: kontoAnlegen(); break;
+					case 2: 
+						kontoAnlegen();
+						break;
 					case 3: geldEinzahlen(); break;
 					case 4: geldAuszahlen(); break;
 					case 5: kontoauszugDrucken(); break;
 					case 6: überweisungBeauftragen(); break;
 					case 9: break mainloop;
-				}
-				
+					}
+
+				} catch (Exception e) {
+					System.err.println(e.getLocalizedMessage());
+				} 
 				System.out.println();
 			}
 
 		System.out.println("Auf Wiedersehen!");
 
 	} // hauptmenü
-	
+
 	private void kontenAnzeigen() {		
 		String[] konten = bs.getKontenliste();
 		if (konten.length > 0) {
@@ -64,10 +70,10 @@ public class UI {
 		}
 	}
 
-	private void kontoAnlegen() {
+	private void kontoAnlegen() throws Exception {
 		System.out.println("Bitte den Namen des Kontoinhabers angeben: ");
 		String name = sc.nextLine();
-		
+
 		System.out.println("Möchten Sie ein Sparkonto (1) oder ein Girokonto (2) anlegen?");
 		int auswahl = Integer.parseInt(sc.nextLine());
 
@@ -75,41 +81,41 @@ public class UI {
 		System.out.println("Konto mit der Nummer " + kontonummer + " neu angelegt.");
 	}
 
-	private void geldEinzahlen() {
+	private void geldEinzahlen() throws Exception {
 		System.out.println("Geld einzahlen");
 		System.out.print("Bitte die gewünschte Kontonummer eingeben: ");
 		int kontonummer = Integer.parseInt(sc.nextLine());
-		
+
 		// optional prüfen, ob Konto existiert
-		
+
 		System.out.print("Bitte den gewünschten Betrag eingeben: ");
 		double betrag = Double.parseDouble(sc.nextLine());
-		
+
 		long neuerKontostand = bs.geldEinzahlen(kontonummer, (long)betrag * 100);
-		
+
 		System.out.printf("Einzahlung erfolgreich, neuer Kontostand = %.2f Euro", (neuerKontostand / 100.0));
 	}
 
-	private void geldAuszahlen() {
+	private void geldAuszahlen() throws Exception {
 		System.out.println("Geld auszahlen");
 		System.out.print("Bitte die gewünschte Kontonummer eingeben: ");
 		int kontonummer = Integer.parseInt(sc.nextLine());
-		
+
 		System.out.print("Bitte den gewünschten Betrag eingeben: ");
 		double betrag = Double.parseDouble(sc.nextLine());
-		
+
 		boolean erfolgreich = bs.geldAuszahlen(kontonummer, (long)betrag * 100);
-		
+
 		System.out.printf("Auszahlung" + ((!erfolgreich)? " nicht" : "" )+ " erfolgreich. ");
 		System.out.printf("Neuer Kontostand = %.2f Euro.", (bs.getKontostand(kontonummer) / 100.0));	
 	}
-	
+
 	private void kontoauszugDrucken() {
 		System.out.print("Bitte die gewünschte Kontonummer für den Auszug eingeben: ");
 		int kontonummer = Integer.parseInt(sc.nextLine());
-		
+
 		System.out.println();
-		
+
 		// in echt auf einem Drucker
 		System.out.println("Auszug für Konto " + kontonummer);
 		String[] kontobewegungen = bs.erstelleKontoauszug(kontonummer);
@@ -117,22 +123,22 @@ public class UI {
 			System.out.println(kb);
 		}
 	}
-	
+
 	private void überweisungBeauftragen() {
 		System.out.print("Bitte die Kontonummer des Ausgangskontos der Überweisung eingeben: ");
 		int startkonto = Integer.parseInt(sc.nextLine());
-		
+
 		System.out.print("Bitte die Kontonummmer für das Zielkonto der Überweisung eingeben: ");
 		int zielkonto = Integer.parseInt(sc.nextLine());
-		
+
 		System.out.print("Bitte den gewünschten Überweisungsbetrag eingeben: ");
 		double betrag = Double.parseDouble(sc.nextLine());
-		
+
 		System.out.print("Bitte den Verwendungszweck eingeben: ");
 		String verwendungszweck = sc.nextLine();
-		
+
 		boolean erfolgreich = bs.überweisungBeauftragen(startkonto, zielkonto, (long)(betrag * 100), verwendungszweck);
-		
+
 		System.out.println("Überweisung" + ( (!erfolgreich) ? " nicht" : "") + " erfolgreich ausgeführt.");
 	}
 

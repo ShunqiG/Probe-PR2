@@ -1,9 +1,10 @@
 package de.hs_mannheim.informatik.bank.domain;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
 
-public class Bank {
+public class Bank implements Serializable {
 	private String name;
 	private HashMap<Integer, Konto> konten = new HashMap<>();
 	
