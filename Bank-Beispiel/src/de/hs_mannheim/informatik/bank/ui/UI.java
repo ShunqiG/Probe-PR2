@@ -119,9 +119,13 @@ public class UI {
 		// in echt auf einem Drucker
 		System.out.println("Auszug für Konto " + kontonummer);
 		String[] kontobewegungen = bs.erstelleKontoauszug(kontonummer);
-		for (String kb : kontobewegungen) {
-			System.out.println(kb);
-		}
+
+		if (kontobewegungen.length > 0)
+			for (String kb : kontobewegungen) {
+				System.out.println(kb);
+			}
+		else
+			System.out.println("Noch keine Kontobewegungen.");
 	}
 
 	private void überweisungBeauftragen() {
