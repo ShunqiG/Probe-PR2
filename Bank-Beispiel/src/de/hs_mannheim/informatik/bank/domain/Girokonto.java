@@ -4,8 +4,8 @@ import java.io.Serializable;
 
 public class Girokonto extends Konto implements Serializable {
 
-	public Girokonto(String inhaber) {
-		super(inhaber);
+	public Girokonto(String inhaber, int kontozähler) {
+		super(inhaber, kontozähler);
 	}
 	
 	public boolean überweise(Girokonto ziel, long betrag, String zweck) {

@@ -1,31 +1,17 @@
 package de.hs_mannheim.informatik.bank.domain;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import de.hs_mannheim.informatik.bank.infrastructure.Persistenz;
-
 public class Konto implements Serializable {
-	private static int kontozähler = 0;
-
-	static { 		// die bislang eleganteste Lösung, die mir eingefallen ist
-		try {
-			if (Persistenz.sindDatenGespeichert())
-				kontozähler = Persistenz.ladeKontozähler();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
 	private int nummer;
 	private long stand = 0;
 	private String inhaber;
 
 	private ArrayList<Kontobewegung> kontobewegungen;
 
-	public Konto(String inhaber) {
-		nummer = 1000 + kontozähler++;
+	public Konto(String inhaber, int kontozähler) {
+		nummer = 1000 + kontozähler;
 		this.inhaber = inhaber;
 
 		this.kontobewegungen = new ArrayList<>();
@@ -75,10 +61,6 @@ public class Konto implements Serializable {
 		}
 
 		return auflistung;
-	}
-	
-	public int getKontozähler() {
-		return kontozähler;
 	}
 
 }

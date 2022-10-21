@@ -11,26 +11,18 @@ public class Banksystem {
 	private Bank bank;
 
 	public Banksystem(String bankname) throws Exception {
-		if (Persistenz.sindDatenGespeichert())
-			this.bank = (Bank) Persistenz.ladeBankDaten();
+		if (Persistenz.sindDatenGespeichert(bankname))
+			this.bank = (Bank) Persistenz.ladeBankDaten(bankname);
 		else
 			this.bank = new Bank(bankname);
 	}
 
 	public int kontoAnlegen(String name, int auswahl) throws Exception {
-		Konto k;
-
-		if (auswahl == 1) 
-			k = new Konto(name);
-		else 
-			k = new Girokonto(name);
-
-		bank.addKonto(k);
+		int kontonummer = bank.addKonto(name, auswahl);
 		
-		Persistenz.speichereBankDaten(this.bank);
-		Persistenz.speichereKontozähler(k.getKontozähler());
+		Persistenz.speichereBankDaten(this.bank, bank.getName());
 
-		return k.getKontonummer();
+		return kontonummer;
 	}
 
 	public String[] getKontenliste() {
@@ -53,7 +45,7 @@ public class Banksystem {
 		Konto konto = bank.findeKonto(kontonummer);
 		konto.einzahlen(betrag, "Einzahlung am Schalter", "Einzahlung", konto.getInhaber());
 
-		Persistenz.speichereBankDaten(this.bank);
+		Persistenz.speichereBankDaten(this.bank, bank.getName());
 		
 		return konto.getKontostand();
 	}
@@ -61,7 +53,7 @@ public class Banksystem {
 	public boolean geldAuszahlen(int kontonummer, long betrag) throws Exception {
 		Konto konto = bank.findeKonto(kontonummer);
 		
-		Persistenz.speichereBankDaten(this.bank);
+		Persistenz.speichereBankDaten(this.bank, bank.getName());
 
 		return konto.auszahlen(betrag, "Auszahlung am Schalter", "Auszahlung", konto.getInhaber());
 	}
